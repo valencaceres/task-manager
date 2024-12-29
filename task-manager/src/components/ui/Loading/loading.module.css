@@ -1,0 +1,14 @@
+@keyframes delay-150 {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-delay-150 {
+    animation-delay: 150ms;
+  }
+  
+  

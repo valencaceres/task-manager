@@ -47,3 +47,6 @@ En esta carpeta guardo todos los archivos de utilidad. En este caso son:
 - **cn.ts**: Archivo encargado de manejar la lógica de `cn`, para poder utilizar estilos de Tailwind y estilos locales en un mismo `className`.
 - **config.ts**: Archivo en el que almaceno todas las variables de entorno para poder acceder más fácilmente a ellas.
 
+La url de la API es la siguiente:
+https://task-manager-lk30.onrender.com
+

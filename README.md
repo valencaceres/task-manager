@@ -1,6 +1,7 @@
 # Task Manager
 
 Esta aplicación está creada según las consignas. Utiliza React para el frontend, con Tailwind para los styles (además de lucide-react para los iconos), y Express para el backend. 
+En ella utilizo Typescript, y esta desplegada con Render para la API y Vercel para la APP.
 
 Para la seguridad, implementé dos middlewares, uno que utiliza una key generada con `uuid4`. Tiene 2 rutas en el front: 
 
@@ -47,6 +48,6 @@ En esta carpeta guardo todos los archivos de utilidad. En este caso son:
 - **cn.ts**: Archivo encargado de manejar la lógica de `cn`, para poder utilizar estilos de Tailwind y estilos locales en un mismo `className`.
 - **config.ts**: Archivo en el que almaceno todas las variables de entorno para poder acceder más fácilmente a ellas.
 
-La url de la API es la siguiente:
-https://task-manager-lk30.onrender.com
+La url de la app Task Manager es la siguiente:
+[https://task-manager-lk30.onrender.com](https://task-manager-khaki-five.vercel.app/)
 

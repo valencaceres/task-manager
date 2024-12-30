@@ -1,0 +1,431 @@
+openapi: 3.0.1
+info:
+  title: Task Manager API
+  version: 1.0.0
+  description: API para la gestión de tareas. Puedes crear, obtener, actualizar y eliminar tareas.
+servers:
+  - url: https://task-manager-lk30.onrender.com/api
+    description: Servidor de produccion levantado en Render
+
+paths:
+  /task/create:
+    post:
+      summary: Crear una nueva tarea
+      description: Crea una tarea nueva enviando el título y la descripción. Retorna la tarea creada con detalles adicionales.
+      operationId: createTask
+      requestBody:
+        description: Datos de la tarea a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: El título de la tarea
+                  example: "Tarea 1"
+                description:
+                  type: string
+                  description: La descripción de la tarea
+                  example: "Descripción de tarea 1"
+              required:
+                - title
+                - description
+      responses:
+        '201':
+          description: Tarea creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        example: "6771689c87cb123eb971bfaf"
+                      title:
+                        type: string
+                        example: "Tarea 1"
+                      description:
+                        type: string
+                        example: "Descripción de tarea 1"
+                      status:
+                        type: boolean
+                        example: false
+                      _id:
+                        type: string
+                        example: "67717526fb55b962d36fcb5f"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-12-29T16:13:26.516Z"
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: "2024-12-29T16:13:26.516Z"
+                      __v:
+                        type: integer
+                        example: 0
+                  error:
+                    type: object
+                    example: null
+        '400':
+          description: Solicitud mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Missing required field"
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /task/getAll:
+    get:
+      summary: Obtener todas las tareas, sin importar el status
+      description: Obtiene todas las tareas registradas, sin filtrar por estado.
+      operationId: getAllTasks
+      responses:
+        '200':
+          description: Lista de tareas obtenidas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /task/getAll?status=true:
+    get:
+      summary: Obtener todas las tareas con estado verdadero
+      description: Obtiene todas las tareas cuyo estado es `true` (Completadas).
+      operationId: getAllTasksByStatusTrue
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: boolean
+            enum: [true]
+          description: Filtra las tareas por estado activo.
+      responses:
+        '200':
+          description: Lista de tareas con estado verdadero obtenidas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+        '400':
+          description: Parámetro de estado no válido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid status parameter"
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /task/getAll?status=false:
+    get:
+      summary: Obtener todas las tareas con estado falso
+      description: Obtiene todas las tareas cuyo estado es `false` (Pendientes).
+      operationId: getAllTasksByStatusFalse
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: boolean
+            enum: [false]
+          description: Filtra las tareas por estado inactivo.
+      responses:
+        '200':
+          description: Lista de tareas con estado falso obtenidas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TaskGetAll'
+        '400':
+          description: Parámetro de estado no válido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid status parameter"
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /task/update:
+    put:
+      summary: Actualizar una tarea existente
+      description: Actualiza los detalles de una tarea específica. El `id` es obligatorio, mientras que `title`, `description` y `status` son opcionales.
+      operationId: updateTask
+      requestBody:
+        description: Datos de la tarea a actualizar (el `id` es obligatorio)
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: ID de la tarea a actualizar (obligatorio)
+                  example: "67717526fb55b962d36fcb5f"
+                title:
+                  type: string
+                  description: El título de la tarea (opcional)
+                  example: "Nuevo título de tarea"
+                description:
+                  type: string
+                  description: La descripción de la tarea (opcional)
+                  example: "Nueva descripción de tarea"
+                status:
+                  type: boolean
+                  description: El estado de la tarea (opcional)
+                  example: true
+              required:
+                - _id
+      responses:
+        '200':
+          description: Tarea actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Task'
+                  error:
+                    type: object
+                    example: null
+        '400':
+          description: Solicitud mal formada o campos faltantes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Missing required field"
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Task not found"
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+  /task/deleteById/{id}:
+    delete:
+      summary: Eliminar una tarea
+      description: Elimina una tarea existente usando el `id` proporcionado como parámetro en la ruta.
+      operationId: deleteTaskById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: El `id` de la tarea a eliminar.
+          schema:
+            type: string
+            example: "67717526fb55b962d36fcb5f"
+      responses:
+        '200':
+          description: Tarea eliminada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: string
+                    example: "Task deleted successfully"
+                  error: 
+                    type: string
+                    example: null
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Task not found"
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        user_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: boolean
+        _id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        __v:
+          type: integer
+    TaskGetAll:
+      type: object
+      properties:
+        user_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: boolean
+          example: false
+        _id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        __v:
+          type: integer

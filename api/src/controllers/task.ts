@@ -19,10 +19,7 @@ const create = async (req: any, res: Response, next: NextFunction) => {
       return next(boom.badData);
     }
 
-    const user_id = req.user?._id;
-
     const newTask = new Task({
-      user_id,
       title,
       description,
       status: false,
@@ -42,14 +39,8 @@ const getAll = async (req: any, res: Response, next: NextFunction) => {
   try {
     const { status } = req.query;
 
-    const user_id = req.user?._id;
-    console.log(user_id)
-    if (!user_id) {
-      return next(boom.unauthorized("User not authenticated"));
-    }
-
     // Filtro básico por user_id
-    const filter: any = { user_id };
+    const filter: any = {};
 
     // Si status es especificado, agregarlo al filtro
     if (status !== undefined) {

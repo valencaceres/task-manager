@@ -18,25 +18,26 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white pt-10">
-      <div className="w-full flex justify-end pr-5">
-        <Button type="login" onClick={() => handleUser()}>
-          Cerrar sesion
-        </Button>
-      </div>
-      <h1 className="text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500 h-[15vh]">
-        Task Manager
-      </h1>
-      <Outlet />
-      <footer className="bg-black h-[10vh] w-full flex justify-center items-center flex-col">
-        <h3>&copy; 2024 Valentin Caceres. Todos los derechos reservados.</h3>
-        <div>
-          <Link to={"https://www.linkedin.com/in/valentin-caceres-b22446288/"}>
-            <Linkedin />
-          </Link>
-        </div>
-      </footer>
+<div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 to-gray-800 text-white pt-10">
+  <div className="w-full flex justify-end pr-5">
+    {/* Contenido adicional */}
+  </div>
+  <h1 className="text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500">
+    Task Manager
+  </h1>
+  <div className="flex-1">
+    <Outlet />
+  </div>
+  <footer className="bg-black h-[10vh] w-full flex justify-center items-center flex-col">
+    <h3>&copy; 2024 Valentin Caceres. Todos los derechos reservados.</h3>
+    <div>
+      <Link to={"https://www.linkedin.com/in/valentin-caceres-b22446288/"}>
+        <Linkedin />
+      </Link>
     </div>
+  </footer>
+</div>
+
   );
 };
 

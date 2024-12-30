@@ -7,10 +7,10 @@ import { createTaskValidator, updateTaskValidator } from "../schemas/task";
 
 const TaskRouter = Router()
 
-TaskRouter.post('/create', auth, createTaskValidator, authenticateJWT, Task.create)
-TaskRouter.get('/getAll', auth, authenticateJWT, Task.getAll)
-TaskRouter.get('/getById/:id', auth, authenticateJWT, Task.getById)
-TaskRouter.put('/update', auth, updateTaskValidator, authenticateJWT, Task.update)
-TaskRouter.delete('/deleteById/:id', auth, authenticateJWT, Task.deleteById)
+TaskRouter.post('/create', auth, createTaskValidator, Task.create)
+TaskRouter.get('/getAll', auth, Task.getAll)
+TaskRouter.get('/getById/:id', auth, Task.getById)
+TaskRouter.put('/update', auth, updateTaskValidator, Task.update)
+TaskRouter.delete('/deleteById/:id', auth, Task.deleteById)
 
 export default TaskRouter
